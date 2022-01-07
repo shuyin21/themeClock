@@ -5,7 +5,7 @@ import ClockComponent from '../components/clock.component';
 
 const HomePage = () => {
 
-    const [toggleLight, setToggleLight] = useState(true);
+    const [toggleLight, setToggleLight] = useState(false);
 
 
 
