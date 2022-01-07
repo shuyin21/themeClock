@@ -1,12 +1,13 @@
 
 import './App.css';
-import HomePage from './pages/homePage';
+import ClockComponent from './components/clock.component';
+
 
 
 function App() {
   return (
     <>
-      <HomePage />
+      <ClockComponent />
     </>
   );
 }

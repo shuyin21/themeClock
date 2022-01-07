@@ -1,26 +1,100 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import styled, { css } from 'styled-components';
 
 const ClockComponent = () => {
+
+    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+    const [time, setTime] = useState(new Date());
+    const scale = (num, in_min, in_max, out_min, out_max) => {
+        return (num - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+    }
+
+    useEffect(() => {
+
+        const interval = setInterval(
+            () => setTime(new Date()), 1000
+        );
+
+
+        const month = time.getMonth();
+        const day = time.getDay();
+        const date = time.getDate();
+        const hours = time.getHours();
+        const hoursForClock = hours >= 13 ? hours % 12 : hours;
+        const minutes = time.getMinutes();
+        const seconds = time.getSeconds();
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+
+        const hourEl = document.getElementById('hourEl');
+        const minuteEl = document.getElementById('minuteEl');
+        const secondEl = document.getElementById('secondEl');
+        const timeEl = document.getElementById('timeEl');
+        const dateEl = document.getElementById('dateEl');
+
+        hourEl.style.transform = `translate(-50%, -100%) rotate(${scale(hoursForClock, 0, 12, 0, 360)}deg)`;
+        minuteEl.style.transform = `translate(-50%, -100%) rotate(${scale(minutes, 0, 60, 0, 360)}deg)`;
+        secondEl.style.transform = `translate(-50%, -100%) rotate(${scale(seconds, 0, 60, 0, 360)}deg)`;
+
+        timeEl.innerHTML = `${hoursForClock}:${minutes < 10 ? `0${minutes}` : minutes} ${ampm}`
+        dateEl.innerHTML = `${days[day]}, ${months[month]} <span class="circle">${date}</span>`;
+
+        // if (props.toogleLight === false) { hourEl.style.backgroundColor = 'green' } else { hourEl.style.backgroundColor = 'red' }
+
+        return () => {
+            clearInterval(interval);
+        }
+
+
+
+
+    }, [time]);
+
+    const [toggleLight, setToggleLight] = useState(false);
+
+
+
+    function toggleHandler() {
+        setToggleLight(!toggleLight)
+    }
+
+
+
     return (
-        <ClockContainer>
-            <Clock>
-                {/* <Needle /> */}
-                <HourNeedle />
-                <MinuteNeedle />
-                <SecondNeedle />
 
-                <CenterPoint></CenterPoint>
-            </Clock>
 
-            <Time>12:00</Time>
-            <DateDiv>Monday, Nov <span>2</span></DateDiv>
-        </ClockContainer>
+
+        <Home toggleLight={toggleLight}>
+            <HomepageWrapper
+                toggleLight={toggleLight}>
+                <ToggleButton
+                    toggleLight={toggleLight}
+
+                    onClick={toggleHandler}>{toggleLight ? 'Light Mode' : ' Dark Mode'}</ToggleButton>
+                <ClockContainer>
+                    <Clock>
+                        {/* <Needle /> */}
+                        <HourNeedle id='hourEl' toggleLight={toggleLight} />
+                        <MinuteNeedle id='minuteEl' toggleLight={toggleLight} />
+                        <SecondNeedle id='secondEl' />
+
+                        <CenterPoint></CenterPoint>
+                    </Clock>
+
+                    <Time id='timeEl' toggleLight={toggleLight}>12:00</Time>
+                    <DateDiv id='dateEl'>Monday, Nov <span>2</span></DateDiv>
+                </ClockContainer>
+
+            </HomepageWrapper>
+        </Home>
+
     )
 }
 
 export default ClockComponent;
+
 
 const NeedleStyles = css`
 background-color:#000;
@@ -67,18 +141,22 @@ ${NeedleStyles};
 
 const HourNeedle = styled.div`
 ${NeedleStyles};
-transform: translate(-50%, -100%) rotate(15deg);
+background-color:${props => props.toggleLight === true ? '#15f4ee' : '#000'};
+transition: all 0.5s ease-in;
+
 `;
 
 const MinuteNeedle = styled.div`
 ${NeedleStyles};
-transform: translate(-50%, -100%) rotate(180deg);
+background-color:${props => props.toggleLight === true ? '#15f4ee' : '#000'};
+transition: all 0.5s ease-in;
+
 height:100px;
 `;
 
 const SecondNeedle = styled.div`
 ${NeedleStyles};
-transform: translate(-50%, -100%) rotate(0deg);
+
 height:100px;
 background-color: #e74c3c;
 `;
@@ -109,6 +187,8 @@ border-radius: 50%;
 
 const Time = styled.div`
 font-size:60px;
+color:${props => props.toggleLight === true ? '#15f4ee' : '#000'};
+transition: all 0.5s ease-in;
 `;
 
 const DateDiv = styled.div`
@@ -130,5 +210,55 @@ span{
     line-height: 18px;
     transition: all 0.5s ease-in;
     font-size: 12px;
+}
+`;
+
+const Home = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
+width:100vw;
+height:100vh;
+background-color: ${props => props.toggleLight === true ? "#000" : "#fff"};
+transition: all 0.5s ease-in;
+
+`;
+
+const HomepageWrapper = styled.div`
+transition: all 0.5s ease-in;
+display: flex;
+
+background-color: ${props => props.toggleLight === true ? "#000" : "#fff"};
+justify-content: center;
+`;
+
+const darkMode = css`
+background-color: '#000',
+color: '#fff'
+`;
+
+const lightMode = css`
+background-color:'#fff';
+color:'#000';
+
+`;
+
+
+
+const ToggleButton = styled.button`
+
+background-color: ${props => props.toggleLight === true ? "#fff" : "#000"};
+color: ${props => props.toggleLight === true ? "#333" : "#fff"};
+border: 0;
+border-radius: 4px;
+padding: 8px 12px;
+position:absolute;
+top:100px;
+cursor:pointer;
+
+transition: all 0.5s ease-in;
+&:focus{
+    outline:none;
+    
 }
 `;
