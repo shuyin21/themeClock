@@ -41,7 +41,7 @@ const ClockComponent = () => {
         timeEl.innerHTML = `${hoursForClock}:${minutes < 10 ? `0${minutes}` : minutes} ${ampm}`
         dateEl.innerHTML = `${days[day]}, ${months[month]} <span class="circle">${date}</span>`;
 
-        // if (props.toogleLight === false) { hourEl.style.backgroundColor = 'green' } else { hourEl.style.backgroundColor = 'red' }
+
 
         return () => {
             clearInterval(interval);
@@ -106,18 +106,7 @@ width:3px;
 transform-origin: bottom center;
 `;
 
-// const rootStyles = css`
-// color: ${primary} ? '#000' : '#fff';
-// `
 
-const primaryColor = '#000';
-const secondaryColor = '#fff';
-
-// darkHtml = 
-// primaryColor = #fff;
-// secondaryColor = #333;
-// backgroundColor = #111;
-// color:primaryColor
 
 const ClockContainer = styled.div`
 display: flex;
@@ -134,10 +123,7 @@ height:200px;
 
 `;
 
-const Needle = styled.div`
-${NeedleStyles};
 
-`;
 
 const HourNeedle = styled.div`
 ${NeedleStyles};
@@ -232,16 +218,6 @@ background-color: ${props => props.toggleLight === true ? "#000" : "#fff"};
 justify-content: center;
 `;
 
-const darkMode = css`
-background-color: '#000',
-color: '#fff'
-`;
-
-const lightMode = css`
-background-color:'#fff';
-color:'#000';
-
-`;
 
 
 
