@@ -173,7 +173,7 @@ border-radius: 50%;
 
 const Time = styled.div`
 font-size:60px;
-color:${props => props.toggleLight === true ? '#15f4ee' : '#000'};
+color:${props => props.toggleLight === true ? '#15f4ee' : '#333'};
 transition: all 0.5s ease-in;
 `;
 
